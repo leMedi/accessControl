@@ -12,9 +12,9 @@ app.config.from_object('config')
 
 @app.errorhandler(404)
 def not_found(error):
-    return render_template('404.html'), 404
+    return '404 not found', 404
 
 
 @app.route('/')
 def index():
-    return "Hello World", 200
+    return render_template('index.html')
