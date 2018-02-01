@@ -1,0 +1,10 @@
+# Distribution / packaging
+env/
+build/
+dist/
+lib/
+lib
+lib64
+lib64/
+*.pyc
+*.egg-info
