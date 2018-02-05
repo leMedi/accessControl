@@ -8,3 +8,5 @@ lib64
 lib64/
 *.pyc
 *.egg-info
+
+config.py
