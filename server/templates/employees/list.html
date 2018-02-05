@@ -1,0 +1,34 @@
+{% extends 'layout/base.html' %}
+{% from 'macros/pagination.html' import render_navigation %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <strong>Employees</strong>
+        </div> <!-- .card-header -->
+        <div class="card-body">
+            <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Full Name</th>
+                        <th>Departemet</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees.items %}
+                    <tr>
+                        <td>{{ employee.code }}</td>
+                        <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                        <td>{{ employee.code }}</td>
+                        <td>{{ employee.date_creation }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {{ render_navigation(employees, 'list_employee') }}
+        </div> <!-- card-body -->
+    </div>
+{% endblock %}

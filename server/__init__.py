@@ -48,9 +48,10 @@ class EmployeeForm(Form):
 ## ** routes ** ##
 
 # List All employees
-@app.route('/employee/list')
-def list_employee():
-    return render_template('employees/list.html')
+@app.route('/employee/list/<int:page>')
+def list_employee(page=1):
+    employees = Employee.objects.paginate(page=page, per_page=10)
+    return render_template('employees/list.html', employees=employees)
 
 # Add new employee
 @app.route('/employee/add', methods=['GET', 'POST'])
