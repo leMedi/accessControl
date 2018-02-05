@@ -1,4 +1,6 @@
 {% extends 'layout/base.html' %}
+{% from 'macros/form.html' import horizental_input %}
+
 
 {% block content %}
     <div class="row">
@@ -9,38 +11,10 @@
                     <strong>Add Employee</strong>
                 </div> <!-- card-header -->
                 <div class="card-body card-block">
-                        <div class="row form-group">
-                            <div class="col col-md-2">
-                                <label for="hf-email" class="form-control-label mt-2">First Name</label>
-                            </div>
-                            <div class="col-12 col-md-10">
-                                <input type="email" id="hf-email" name="hf-email" placeholder="Mehdi" class="form-control">
-                            </div>
-                        </div> <!-- .col -->
-                        <div class="row form-group">
-                            <div class="col col-md-2">
-                                <label for="hf-email" class="form-control-label mt-2">Last Name</label>
-                            </div>
-                            <div class="col-12 col-md-10">
-                                <input type="email" id="hf-email" name="hf-email" placeholder="ElHaij" class="form-control">
-                            </div>
-                        </div> <!-- .col -->
-                        <div class="row form-group">
-                            <div class="col col-md-2">
-                                <label for="hf-email" class="form-control-label mt-2">Departement</label>
-                            </div>
-                            <div class="col-12 col-md-10">
-                                <input type="email" id="hf-email" name="hf-email" placeholder="IT" class="form-control">
-                            </div>
-                        </div> <!-- .col -->
-                        <div class="row form-group">
-                            <div class="col col-md-2">
-                                <label for="hf-email" class="form-control-label mt-2">Code</label>
-                            </div>
-                            <div class="col-12 col-md-10">
-                                <input type="email" id="hf-email" name="hf-email" placeholder="NXT8876" class="form-control">
-                            </div>
-                        </div> <!-- .col -->
+                        {{ horizental_input(form.first_name) }}
+                        {{ horizental_input(form.last_name) }}
+                        {{ horizental_input(form.departement) }}
+                        {{ horizental_input(form.code) }}
                     </div> <!-- .card-body -->
                     <div class="card-footer">
                         <div class="float-right">
