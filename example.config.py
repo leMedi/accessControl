@@ -1,0 +1,3 @@
+MONGODB_DB = 'test'
+MONGODB_HOST = 'localhost'
+MONGODB_PORT = 27017
