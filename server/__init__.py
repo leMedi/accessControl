@@ -25,6 +25,32 @@ def index():
 
 
 ##############
+## Badges
+#########
+## ** Employee Class ** ##
+class Badge(db.EmbeddedDocument):
+    code_hex = db.StringField(unique=True, required=True, max_length=15)
+    code_dec = db.StringField(max_length=15)
+    is_active = db.BooleanField(required=True, default=True)
+    owner = db.ObjectIdField(required=True)
+    date_creation = db.DateTimeField(default=datetime.datetime.utcnow)
+
+## ** forms ** ##
+class BadgeForm(Form):
+    code_hex = StringField('Badge Code', [validators.Length(min=4, max=25)])
+
+# delete badge by hexCode
+@app.route('/badge/delete/h/<badge_hexcode>/<employee_id>')
+def add_badge(employee_id, badge_hexcode):
+    Employee.objects(id=employee_id).update(
+        pull__badges__code_hex=badge_hexcode)
+    return redirect("/employee/show/i/" + employee_id)
+
+##############
+## End Badges
+#########
+
+##############
 ## Employees
 #########
 
