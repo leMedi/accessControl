@@ -1,5 +1,5 @@
 # Import flask and template operators
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_mongoengine import MongoEngine
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 import datetime
@@ -59,9 +59,9 @@ class Employee(db.Document):
     first_name = db.StringField(required=True, max_length=200)
     last_name = db.StringField(required=True, max_length=200)
     department = db.StringField(required=True, max_length=200)
-    code = db.StringField(required=True, max_length=20)
+    code = db.StringField(unique=True, required=True, max_length=20)
     date_creation = db.DateTimeField(default=datetime.datetime.utcnow)
- 
+    badges = db.ListField(db.EmbeddedDocumentField(Badge))
 
 ## ** forms ** ##
 # TODO: use model_form instead
@@ -95,11 +95,23 @@ def add_employee():
     return render_template('employees/add.html', form=form)
 
 # Show employee by ID
-@app.route('/employee/show/i/<employee_id>')
+@app.route('/employee/show/i/<employee_id>', methods=['GET', 'POST'])
 def show_employee(employee_id):
     employee = Employee.objects.get_or_404(id=employee_id)
-    return render_template('employees/show.html', employee=employee)
+    form = BadgeForm(request.form)
+    if request.method == 'POST' and form.validate():
+        b = Badge(
+            code_hex=form.code_hex.data,
+            owner=employee.id
+        )
+        employee.badges.append(b)
+        employee.save()
+        form = BadgeForm()
+    return render_template('employees/show.html', employee=employee, form=form, title="Employees")
 
 ##############
 ## End Employees
 #########
+
+
+
