@@ -77,7 +77,7 @@ class EmployeeForm(Form):
 @app.route('/employee/list/<int:page>')
 def list_employee(page=1):
     employees = Employee.objects.paginate(page=page, per_page=10)
-    return render_template('employees/list.html', employees=employees)
+    return render_template('employees/list.html', employees=employees, title="Employees")
 
 # Add new employee
 @app.route('/employee/add', methods=['GET', 'POST'])
@@ -92,7 +92,7 @@ def add_employee():
         )
         e.save()
         return "ok"
-    return render_template('employees/add.html', form=form)
+    return render_template('employees/add.html', form=form, title="Employees")
 
 # Show employee by ID
 @app.route('/employee/show/i/<employee_id>', methods=['GET', 'POST'])
