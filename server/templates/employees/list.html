@@ -19,7 +19,7 @@
                 <tbody>
                     {% for employee in employees.items %}
                     <tr>
-                        <td>{{ employee.code }}</td>
+                        <td><a href="/employee/show/i/{{ employee.id }}">{{ employee.code }}</a></td>
                         <td>{{ employee.first_name }} {{ employee.last_name }}</td>
                         <td>{{ employee.code }}</td>
                         <td>{{ employee.date_creation }}</td>
