@@ -4,7 +4,11 @@
         <label for="{{ field.name }}" class="form-control-label mt-2">{{ field.label.text }}{% if field.flags.required %} *{% endif %}</label>
     </div>
     <div class="col-12 col-md-10">
-        <input type="{{ type }}" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.placeholder or field.label.text }}" value="{{ field.data|default('', true) }}" class="form-control">
+        {% if field.type == "TimeField" %}
+        <input type="time" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.placeholder or field.label.text }}" value="{{ field.data|default('', true) }}" class="form-control">
+        {% else %}
+        <input type="" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.placeholder or field.label.text }}" value="{{ field.data|default('', true) }}" class="form-control">
+        {% endif %}
         {% for error in field.errors %}
         <div class="invalid-feedback d-block">{{ error }}</div>
         {% endfor %}
