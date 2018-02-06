@@ -68,6 +68,12 @@ def add_employee():
         return "ok"
     return render_template('employees/add.html', form=form)
 
+# Show employee by ID
+@app.route('/employee/show/i/<employee_id>')
+def show_employee(employee_id):
+    employee = Employee.objects.get_or_404(id=employee_id)
+    return render_template('employees/show.html', employee=employee)
+
 ##############
 ## End Employees
 #########

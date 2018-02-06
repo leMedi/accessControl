@@ -1,0 +1,28 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Employees</strong>
+                </div> <!-- .card-header -->
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Full Name</dt>
+                        <dd class="col-sm-9">{{ employee.last_name }} {{ employee.first_name }}</dd>
+        
+                        <dt class="col-sm-3">Department</dt>
+                        <dd class="col-sm-9">{{ employee.department }}</dd>
+        
+                        <dt class="col-sm-3">Code</dt>
+                        <dd class="col-sm-9">{{ employee.code }}</dd>
+        
+                        <dt class="col-sm-3">Date Creation</dt>
+                        <dd class="col-sm-9">{{ employee.date_creation }}</dd>
+                    </dl>
+                </div> <!-- card-body -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
