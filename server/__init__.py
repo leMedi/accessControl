@@ -14,6 +14,20 @@ app.config.from_object('config')
 # Database Connection
 db = MongoEngine(app)
 
+##############
+## Jinja Filters
+#########
+# convert hour:minute timestamp to HH:MM string
+def pretty_print_time(value):
+    # bug in datetime cannot convert from timestamp 0 (https://github.com/home-assistant/appdaemon/issues/83)
+    delta = 86400
+    d = datetime.datetime.fromtimestamp(delta + value)
+    return d.strftime('%H:%M')
+
+
+app.jinja_env.filters['datetime'] = pretty_print_time
+
+
 # Sample HTTP error handling
 @app.errorhandler(404)
 def not_found(error):
