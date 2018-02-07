@@ -1,0 +1,34 @@
+{% extends 'layout/base.html' %}
+{% from 'macros/pagination.html' import render_navigation %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <strong>Employees</strong>
+        </div> <!-- .card-header -->
+        <div class="card-body">
+            <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for access in accesses.items %}
+                    <tr>
+                        <td><a href="/access/show/i/{{ access.id }}">{{ access.name }}</a></td>
+                        <td>{{ access.start_time|datetime }}</td>
+                        <td>{{ access.end_time|datetime }}</td>
+                        <td>{{ access.active }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {{ render_navigation(accesses, 'list_employee') }}
+        </div> <!-- card-body -->
+    </div>
+{% endblock %}

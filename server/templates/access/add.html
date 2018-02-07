@@ -1,0 +1,32 @@
+{% extends 'layout/base.html' %}
+{% from 'macros/form.html' import horizental_input %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-6">
+            <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Add Employee</strong>
+                </div> <!-- card-header -->
+                <div class="card-body card-block">
+                        {{ horizental_input(form.name) }}
+                        {{ horizental_input(form.start) }}
+                        {{ horizental_input(form.end) }}
+                    </div> <!-- .card-body -->
+                    <div class="card-footer">
+                        <div class="float-right">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Submit
+                            </button>
+                            <button type="reset" class="btn btn-danger btn-sm">
+                                <i class="fa fa-ban"></i> Reset
+                            </button>
+                        </div>
+                    </div> <!-- .card-footer -->
+                </div> <!-- .card -->
+            </form>
+        </div> <!-- .col -->
+    </div> <!-- .row -->
+{% endblock %}

@@ -167,6 +167,12 @@ def add_access():
         return "ok"
     return render_template('access/add.html', form=form, title="Access")
 
+# List All accesses
+@app.route('/access/list/<int:page>')
+def list_access(page=1):
+    accesses = Access.objects.paginate(page=page, per_page=10)
+    return render_template('access/list.html', accesses=accesses, title="Access")
+
 ##############
 ## End Access
 #########
