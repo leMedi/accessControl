@@ -4,7 +4,8 @@ from flask_mongoengine import MongoEngine
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 from wtforms_components import TimeField
 import datetime
-
+import coloredlogs
+import logging
 # Define the WSGI application object
 app = Flask(__name__)
 
@@ -13,6 +14,18 @@ app.config.from_object('config')
 
 # Database Connection
 db = MongoEngine(app)
+
+##############
+## Logger
+#########
+# Create a logger object.
+logger = logging.getLogger('FLASK')
+coloredlogs.install(level='DEBUG', logger=logger)
+logger.debug("Logger running")
+
+##############
+## End Logger
+#########
 
 ##############
 ## Jinja Filters
@@ -91,6 +104,7 @@ class EmployeeForm(Form):
 # List All employees
 @app.route('/employee/list/<int:page>')
 def list_employee(page=1):
+    logger.info("Listing Employees")
     employees = Employee.objects.paginate(page=page, per_page=10)
     return render_template('employees/list.html', employees=employees, title="Employees")
 
@@ -106,6 +120,7 @@ def add_employee():
             code=form.code.data
         )
         e.save()
+        logger.info("New Employee added")
         return "ok"
     return render_template('employees/add.html', form=form, title="Employees")
 
