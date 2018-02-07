@@ -137,13 +137,21 @@ def get_day_timestamp(t):
     minute = t.minute * 60
     return (hour + minute)
 
-## ** Employee Class ** ##
+
+## ** Embeded Employee Class ** ##
+class EmbededEmployee(db.EmbeddedDocument):
+    employee_id = db.ObjectIdField(required=True)
+    name = db.StringField(required=True, max_length=200)
+    code = db.StringField(unique=True, required=True, max_length=20)
+
+## ** Access Class ** ##
 class Access(db.Document):
     name = db.StringField(unique=True, required=True, max_length=200)
     start_time = db.IntField(required=True)
     end_time = db.IntField(required=True)
     active = db.BooleanField(required=True, default=True)
-    badges = db.ListField(db.StringField)
+    badges = db.ListField(db.StringField(max_length=15))
+    employees = db.ListField(db.EmbeddedDocumentField(EmbededEmployee))
 
 ## ** forms ** ##
 class AccessForm(Form):
@@ -172,6 +180,39 @@ def add_access():
 def list_access(page=1):
     accesses = Access.objects.paginate(page=page, per_page=10)
     return render_template('access/list.html', accesses=accesses, title="Access")
+
+# Show access by ID
+@app.route('/access/show/i/<access_id>', methods=['GET', 'POST'])
+def show_access(access_id):
+    access = Access.objects.get_or_404(id=access_id)
+    form = BadgeForm(request.form)
+    if request.method == 'POST' and form.validate():
+        employees = Employee.objects(badges__code_hex=form.code_hex.data)
+        if employees.count() > 0:
+            access.badges.append(form.code_hex.data)
+            for employee in employees:
+                e = EmbededEmployee(
+                    employee_id=employee.id,
+                    name=employee.last_name + ' ' + employee.first_name,
+                    code=form.code_hex.data
+                )
+                access.employees.append(e)
+            access.save()
+            form = BadgeForm()
+    return render_template('access/show.html', access=access, form=form, title="Access")
+
+# delete access
+@app.route('/access/delete/i/<access_id>')
+def delete_access(access_id):
+    Access.objects(id=access_id).delete()
+    return redirect("/access/list/1")
+
+# delete employee from access
+@app.route('/access/delete/h/<badge_hexcode>/<access_id>')
+def delete_employee_access(badge_hexcode, access_id):
+    Access.objects(badges=badge_hexcode).update(
+        pull__badges__code_hex=badge_hexcode)
+    return redirect("/employee/show/i/" + badge_hexcode)
 
 ##############
 ## End Access
