@@ -115,4 +115,44 @@ def show_employee(employee_id):
 #########
 
 
+##############
+## Access
+#########
+def get_day_timestamp(t):
+    hour = t.hour * 3600
+    minute = t.minute * 60
+    return (hour + minute)
 
+## ** Employee Class ** ##
+class Access(db.Document):
+    name = db.StringField(unique=True, required=True, max_length=200)
+    start_time = db.IntField(required=True)
+    end_time = db.IntField(required=True)
+    active = db.BooleanField(required=True, default=True)
+    badges = db.ListField(db.StringField)
+
+## ** forms ** ##
+class AccessForm(Form):
+    name = StringField('Name')
+    start = TimeField('Start Time')
+    end = TimeField('End Time') # TODO: validate end > start
+
+## ** routes ** ##
+@app.route('/access/add', methods=['GET', 'POST'])
+def add_access():
+    form = AccessForm(request.form)
+    if request.method == 'POST' and form.validate():
+        # start = datetime.datetime.strptime(form.start.data, "%H:%M")
+        # end = datetime.datetime.strptime(form.end.data, "%H:%M")
+        a = Access(
+            name=form.name.data,
+            start_time=get_day_timestamp(form.start.data),
+            end_time=get_day_timestamp(form.end.data)
+        )
+        a.save()
+        return "ok"
+    return render_template('access/add.html', form=form, title="Access")
+
+##############
+## End Access
+#########
