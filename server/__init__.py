@@ -57,7 +57,7 @@ def index():
 #########
 ## ** Employee Class ** ##
 class Badge(db.EmbeddedDocument):
-    code_hex = db.StringField(unique=True, required=True, max_length=15)
+    code_hex = db.StringField(required=True, max_length=15)
     code_dec = db.StringField(max_length=15)
     is_active = db.BooleanField(required=True, default=True)
     owner = db.ObjectIdField(required=True)
