@@ -121,7 +121,7 @@ def add_employee():
         )
         e.save()
         logger.info("New Employee added")
-        return "ok"
+        return redirect("/employee/show/i/" + str(e.id))
     return render_template('employees/add.html', form=form, title="Employees")
 
 # Show employee by ID
@@ -187,7 +187,7 @@ def add_access():
             end_time=get_day_timestamp(form.end.data)
         )
         a.save()
-        return "ok"
+        return redirect("/access/list/1")
     return render_template('access/add.html', form=form, title="Access")
 
 # List All accesses
