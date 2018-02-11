@@ -1,0 +1,39 @@
+{% extends 'layout/base.html' %} {% from 'macros/pagination.html' import render_navigation %} {% block content %}
+<div class="card">
+    <div class="card-header">
+        <strong>Employees</strong>
+    </div>
+    <!-- .card-header -->
+    <div class="card-body">
+        <table id="bootstrap-data-table" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Employee</th>
+                    <th>Authorization</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events.items %}
+                <tr>
+                    <td>{{ event.date }}</td>
+                    <td>{{ event.badge_owner }} ({{ event.badge_hexcode }})</td>
+                    {% if event.authorized %}
+                        <td>
+                            <span class="badge badge-primary">Authorized</span>
+                        </td>
+                    {% else %}
+                        <td>
+                            <span class="badge badge-danger">Unauthorized</span>
+                        </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {{ render_navigation(events, 'list_employee') }}
+    </div>
+    <!-- card-body -->
+</div>
+{% endblock %}

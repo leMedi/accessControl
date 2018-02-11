@@ -232,3 +232,24 @@ def delete_employee_access(badge_hexcode, access_id):
 ##############
 ## End Access
 #########
+
+##############
+## Events
+#########
+## ** Event Class ** ##
+class Event(db.Document):
+    badge_hexcode = db.StringField(required=True, max_length=200)
+    badge_owner = db.StringField(required=True)
+    date = db.DateTimeField(default=datetime.datetime.utcnow)
+    authorized = db.BooleanField(required=True, default=True)
+
+# List events
+@app.route('/events/list/<int:page>')
+def list_events(page=1):
+    events = Event.objects.paginate(page=page, per_page=50)
+    return render_template('events/list.html', events=events, title="Events")
+
+
+##############
+## End Events
+#########
