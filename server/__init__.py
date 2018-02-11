@@ -1,4 +1,5 @@
 # Import flask and template operators
+import os
 from flask import Flask, render_template, request, redirect
 from flask_mongoengine import MongoEngine
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
@@ -253,3 +254,8 @@ def list_events(page=1):
 ##############
 ## End Events
 #########
+
+
+@app.route('/sys/shut')
+def sys_poweroff():
+    os.system("poweroff")
