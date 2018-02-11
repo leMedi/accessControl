@@ -1,4 +1,4 @@
-from server import app, Access, get_day_timestamp
+from server import app, Access, get_day_timestamp, Employee, Event
 import datetime
 import serial
 import os
@@ -6,6 +6,7 @@ import threading
 from time import sleep
 import coloredlogs
 import logging
+
 
 ##############
 ## Logger
@@ -18,6 +19,28 @@ coloredlogs.install(level='DEBUG', logger=logger)
 ## End Logger
 #########
 
+##############
+## Events
+#########
+
+def save_event(badge_hexcode, authorized):
+    fullname = "Unknown"
+    try:
+        employee = Employee.objects(badges__code_hex=badge_hexcode)[0]
+        fullname = employee.last_name + ' ' + employee.first_name
+    except :
+        pass
+    event = Event(
+        badge_owner=fullname,
+        badge_hexcode=badge_hexcode,
+        authorized=authorized
+    )
+    event.save()
+    return event
+
+##############
+## End Events
+#########
 
 ##############
 ## Access Controle
@@ -36,12 +59,15 @@ def isAuthorized(bagde_hexcode):
 
 def authorize(bagde_hexcode):
     logger.debug("Cheking Auth for badge: '%s'" % bagde_hexcode)
-    if isAuthorized(bagde_hexcode):
+    is_authorized = isAuthorized(bagde_hexcode)
+    if is_authorized:
         logger.info('badge %s authorized' % bagde_hexcode)
         serial_com.write('y'.encode())
     else:
         logger.error('badge %s not authorized' % bagde_hexcode)
         serial_com.write('n'.encode())
+    
+    event = save_event(bagde_hexcode, is_authorized)
 
 ##############
 ## End Access Controle
@@ -90,8 +116,8 @@ options = {
 
 def decode_serial(line):
     logger.debug("decoding serial: '%s'" % line)
+    array = line.split(':')
     if array[0] in options:
-        array = line.split(':')
         options[array[0]](array[1])
     else:
         logger.warning("Unknown Serial CMD")
