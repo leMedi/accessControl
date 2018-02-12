@@ -62,7 +62,7 @@ class Badge(db.EmbeddedDocument):
     code_dec = db.StringField(max_length=15)
     is_active = db.BooleanField(required=True, default=True)
     owner = db.ObjectIdField(required=True)
-    date_creation = db.DateTimeField(default=datetime.datetime.utcnow)
+    date_creation = db.DateTimeField(default=datetime.datetime.now)
 
 ## ** forms ** ##
 class BadgeForm(Form):
@@ -89,7 +89,7 @@ class Employee(db.Document):
     last_name = db.StringField(required=True, max_length=200)
     department = db.StringField(required=True, max_length=200)
     code = db.StringField(unique=True, required=True, max_length=20)
-    date_creation = db.DateTimeField(default=datetime.datetime.utcnow)
+    date_creation = db.DateTimeField(default=datetime.datetime.now)
     badges = db.ListField(db.EmbeddedDocumentField(Badge))
 
 ## ** forms ** ##
@@ -241,13 +241,13 @@ def delete_employee_access(badge_hexcode, access_id):
 class Event(db.Document):
     badge_hexcode = db.StringField(required=True, max_length=200)
     badge_owner = db.StringField(required=True)
-    date = db.DateTimeField(default=datetime.datetime.utcnow)
+    date = db.DateTimeField(default=datetime.datetime.now)
     authorized = db.BooleanField(required=True, default=True)
 
 # List events
 @app.route('/events/list/<int:page>')
 def list_events(page=1):
-    events = Event.objects.paginate(page=page, per_page=50)
+    events = Event.objects.order_by('-date').paginate(page=page, per_page=50)
     return render_template('events/list.html', events=events, title="Events")
 
 
